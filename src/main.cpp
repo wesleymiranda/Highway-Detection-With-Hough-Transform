@@ -3,6 +3,7 @@
 #include "Hough.h"
 
 const int num = 2; // número de vezes que a imagem será borrada
+
 const int Tresh = 6; //Valor para treshold
 
 int main() {
