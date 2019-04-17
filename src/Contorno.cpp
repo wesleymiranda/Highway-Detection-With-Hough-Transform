@@ -30,3 +30,16 @@ uchar Masc(Mat G, uchar Tresh) {
 
 	return Treshold(Grad(tempX / 3, tempY / 3), Tresh);
 }
+
+Mat contorno(Mat C, uchar Tresh) {
+	Mat Aux = Mat::zeros(Size(C.cols, C.rows), CV_8UC1);
+
+	for (int lin = 1; lin < C.rows - 1; lin++) {
+		for (int col = 1; col < C.cols - 1; col++) {
+			Mat Temp = C(Range(lin - 1, lin + 2), Range(col - 1, col + 2));
+			uchar a = Masc(Temp, Tresh);
+			Aux.at<uchar>(lin, col) = a;
+		}
+	}
+	return Aux;
+}
