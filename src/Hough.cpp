@@ -23,3 +23,18 @@ Pontos Varrer(Mat M) {
 	}
 	return Temp;
 }
+
+float converterAngulo(int T) {
+	return (float)(T * PI / 180);
+}
+
+int CarteToPolar(Point2i P, int T) {
+	float Theta = converterAngulo(T);
+	return (int)(P.x * cos(Theta) + P.y * sin(Theta));
+}
+
+int PolarToCarte(Point2i P, int X) {
+	//considere P.x para raio e P.y para angulo
+	float Theta = converterAngulo(P.y);
+	return (int)(P.x / sin(Theta) - X / tan(Theta));
+}
