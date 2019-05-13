@@ -38,3 +38,13 @@ int PolarToCarte(Point2i P, int X) {
 	float Theta = converterAngulo(P.y);
 	return (int)(P.x / sin(Theta) - X / tan(Theta));
 }
+
+void Calculos(Mat M, Pontos P, int Ang_i, int Raio_i) {
+	for (int i = 0; i < P.size(); i++) { //Acessando os pixels da imagem
+		for (int Ang = 0; Ang < M.rows; Ang++) { //Valores limitados para Theta
+			int R =CarteToPolar(P[i], Ang + Ang_i); //Resultados para Rho
+			if ((Raio_i < R)&&(R < (M.cols + Raio_i)))
+				M.at<ushort>(Ang,R - Raio_i)++;
+		}
+	}
+}
