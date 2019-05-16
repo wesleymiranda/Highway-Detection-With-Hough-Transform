@@ -48,3 +48,49 @@ void Calculos(Mat M, Pontos P, int Ang_i, int Raio_i) {
 		}
 	}
 }
+
+Pontos maiorValor(Mat M, ushort corte) {
+	Pontos Temp;
+	Temp.clear();
+
+	for (int Ang = 0; Ang < M.rows; Ang++) {
+		for (int R = 0; R < M.cols; R++) {
+			if (M.at<ushort>(Ang, R) > corte)
+			{
+				Point2i P(R, Ang);
+				Temp.push_back(P);
+				cout << "R= " << P.x << " A= " << P.y<<endl;
+			}
+		}
+	}
+	return Temp;
+}
+
+Mat desenhaRetas(Mat M, Pontos P) {
+	int x1 = 0;
+	int x2 = M.cols;
+	
+	for (int i = 0; i < P.size(); i++) {
+		int y1 = PolarToCarte(P[i], x1 );
+		int y2 = PolarToCarte(P[i], x2);
+		line(M, Point(x1, y1), Point(x2, y2), Scalar(255, 255, 255));
+	}
+	return M;
+}
+
+Mat Hough(Mat H, int Ang_i, int Ang_f, int Raio_i, int Raio_f, ushort corte) {
+
+	Pontos Pixels;
+	Mat Tabela = Mat::zeros(Size(Raio_f - Raio_i, Ang_f - Ang_i), CV_16U);
+	
+	H = inverterCoordenadas(H); //Passa o sistema para as coordenadas cartesianas
+	
+	Pixels = Varrer(H);         //Identificar todos os pixels da imagem
+	Calculos(Tabela, Pixels, Ang_i, Raio_i);
+	Pontos PontoPolar = maiorValor(Tabela, corte);
+	H = desenhaRetas(H, PontoPolar);
+
+	H = inverterCoordenadas(H); //Passa para a coordenada padrão do OpenCV
+	
+	return H;
+}
